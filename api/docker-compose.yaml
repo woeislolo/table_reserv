@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .docker.env
+    networks:
+      - table_reserv
+
+  drf-api:
+    build: ./table_reservation
+    image: drf-api
+    container_name: drf-api
+    restart: always
+    command: "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./table_reservation:/app/www/table_reservation
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    env_file:
+      - .docker.env
+    networks:
+      - table_reserv
+
+networks:
+  table_reserv:
+    driver: bridge
+
+volumes:
+  postgres-data:
