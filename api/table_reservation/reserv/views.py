@@ -47,7 +47,7 @@ class CreateListReservationViewSet(mixins.CreateModelMixin,
         for slot in slots:
             slot_start_time = slot.reservation_time.time()
             slot_end_time = (slot.reservation_time + timedelta(minutes=slot.duration_minutes)).time()
-            # print('slot: ', slot_start_time, slot_end_time)
+
             if not (new_slot_start_time >= slot_end_time or new_slot_end_time <= slot_start_time):
                 return Response({'message': 'Время добавляемой брони пересекается с уже существующими'}, 
                                 status=status.HTTP_400_BAD_REQUEST)
