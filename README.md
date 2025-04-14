@@ -24,5 +24,5 @@ REST API для бронирования столиков в ресторане.
 Инструкция по запуску Docker (из папки api/):
 - docker-compose up --build
 - docker-compose run drf-api python manage.py migrate
-- docker compose up
-- docker compose exec drf-api python manage.py loaddata db_data.json
+- docker-compose up
+- docker-compose exec drf-api python manage.py loaddata db_data.json
