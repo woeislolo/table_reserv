@@ -83,3 +83,38 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
     )}
+
+# logs
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'formatter':{
+            'format': '{levelname} {asctime} {filename} {message}',
+            'style': '{', 
+            },
+        'server_formatter': {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "{levelname} {asctime} {filename} {message}",
+            "style": "{",
+            }
+        },
+
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'log.log',
+            'formatter': 'server_formatter',
+            'encoding': 'UTF-8'
+            },
+        },
+    'loggers': {
+        'reserv': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+            },
+        },
+    }
