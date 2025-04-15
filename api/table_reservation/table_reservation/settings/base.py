@@ -2,6 +2,8 @@ import os
 
 from pathlib import Path
 
+from pythonjsonlogger.json import JsonFormatter
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -95,12 +97,16 @@ LOGGING = {
             'style': '{', 
             },
         'server_formatter': {
-            "()": "django.utils.log.ServerFormatter",
-            "format": "{levelname} {asctime} {filename} {message}",
-            "style": "{",
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '{levelname} {asctime} {filename} {message}',
+            'style': '{',
+            },
+        'json_formatter': {
+            '()': JsonFormatter,
+            'format': '{levelname} {asctime} {filename} {message}',
+            'style': '{',
             }
         },
-
     'handlers': {
         'file': {
             'level': 'WARNING',
@@ -109,10 +115,17 @@ LOGGING = {
             'formatter': 'server_formatter',
             'encoding': 'UTF-8'
             },
+        'json_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'log.json',
+            'formatter': 'json_formatter',
+            'encoding': 'UTF-8'
+            },
         },
     'loggers': {
         'reserv': {
-            'handlers': ['file'],
+            'handlers': ['file', 'json_file'],
             'level': 'WARNING',
             'propagate': True,
             },
