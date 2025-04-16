@@ -10,7 +10,7 @@ REST API для бронирования столиков в ресторане.
 - DELETE /reservations/{id} — удалить бронь
 
 Структура основной папки проекта table_reservation:
-- reserv/ - API: models, serializers, views, urls, admin и папка tests (unittest)
+- reserv/ - API: models, serializers, views, urls, admin, папки tests (unittest) и pytest_tests (pytest)
 - table_reservation/ - конфигурация проекта
 - db_data.json - данные БД для теста API
 
@@ -18,7 +18,8 @@ REST API для бронирования столиков в ресторане.
 - Django
 - DRF
 - PostgreSQL
-- unittest
+- unittest, pytest
+- logging, python-json-logger
 - Docker
 
 Инструкция по запуску Docker (из папки api/):
