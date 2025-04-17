@@ -104,7 +104,7 @@ class TestReservationClass:
             (10, 30, 11)
         ])
     @pytest.mark.django_db
-    def test_create_a_reservation_from_10_to_11(self, api_client, create_db, hour, minutes, duration):
+    def test_create_a_reservation_with_blocked_time(self, api_client, create_db, hour, minutes, duration):
         url = reverse('reserv_list')
         data = {
             'customer_name': 'Петя Иванов',
