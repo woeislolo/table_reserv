@@ -17,7 +17,7 @@ def api_client():
    return APIClient()
 
 @pytest.fixture
-def create_db():
+def fill_db():
     table1 = Table.objects.create(name='Table 1',
                                         seats=4,
                                         location=1)
@@ -39,14 +39,14 @@ def create_db():
             'reservation1': reservation1, 
             'reservation2': reservation2}
 
+
+@pytest.mark.django_db
 class TestTableClass:
-    @pytest.mark.django_db
     def test_get_all_tables(self, api_client):
         url = reverse('table_list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    @pytest.mark.django_db
     def test_create_a_table(self, api_client):
         url = reverse('table_list')
         data = {
@@ -58,34 +58,31 @@ class TestTableClass:
         response = api_client.post(url, data=json_data, content_type='application/json')
         assert response.status_code == status.HTTP_201_CREATED
 
-    @pytest.mark.django_db
-    def test_delete_a_table(self, api_client, create_db):
-        table2=create_db.get('table2')
+    def test_delete_a_table(self, api_client, fill_db):
+        table2=fill_db.get('table2')
         url = reverse('table_delete', args=(table2.id,))
         response = api_client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
+@pytest.mark.django_db
 class TestReservationClass:
-    @pytest.mark.django_db
     def test_get_all_reservations(self, api_client):
         url = reverse('reserv_list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    @pytest.mark.django_db
-    def test_delete_a_reservation(self, api_client, create_db):
-        reservation1=create_db.get('reservation1')
+    def test_delete_a_reservation(self, api_client, fill_db):
+        reservation1=fill_db.get('reservation1')
         url = reverse('reserv_delete', args=(reservation1.id,))
         response = api_client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
-    @pytest.mark.django_db
-    def test_create_a_success_reservation(self, api_client, create_db):
+    def test_create_a_success_reservation(self, api_client, fill_db):
         url = reverse('reserv_list')
         data = {
             'customer_name': 'Петя Иванов',
-            'table_id': create_db.get('table1').id,
+            'table_id': fill_db.get('table1').id,
             'reservation_time': datetime(2025, 10, 1, 15, 30).isoformat(),
             # 'reservation_time': timezone.datetime(2025, 10, 1, 15, 30, tzinfo=pytz.UTC).isoformat(),
             'duration_minutes': 30
@@ -103,12 +100,11 @@ class TestReservationClass:
             (9, 0, 90),
             (10, 30, 11)
         ])
-    @pytest.mark.django_db
-    def test_create_a_reservation_with_blocked_time(self, api_client, create_db, hour, minutes, duration):
+    def test_create_a_reservation_with_blocked_time(self, api_client, fill_db, hour, minutes, duration):
         url = reverse('reserv_list')
         data = {
             'customer_name': 'Петя Иванов',
-            'table_id': create_db.get('table1').id,
+            'table_id': fill_db.get('table1').id,
             'reservation_time': datetime(2025, 10, 1, hour, minutes).isoformat(),
             'duration_minutes': duration
             }
